@@ -14,10 +14,10 @@ export class CepService {
     const url = `https://viacep.com.br/ws/${cod}/json/`;
 
     const header = {
-      headers: new HttpHeaders().set('Content-Type', 'aplication/json'),
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
     };
 
-    return this.http.get(url, header);
+    return this.http.get(url, header).toPromise();
   }
 }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-conclusao',
@@ -7,9 +8,59 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConclusaoPage implements OnInit {
 
-  constructor() { }
+  endereco = {
+    endereco: '',
+    numero: '',
+    complemento: '',
+    bairro: '',
+    cep: '',
+    cidade: '',
+    estado: '',
+  };
 
-  ngOnInit() {
+  constructor(public alerta: AlertController, public nav: NavController) {}
+  
+  ngOnInit(): void {
+    
   }
 
+  ionViewDidEnter() {
+    this.carregadados();
+  }
+
+  async voltar() {
+    const voltando = await this.alerta.create({
+      header: 'ATENÇÃO!',
+      message: 'Deseja retornar? Perderá todods os dados!',
+      buttons: [
+        {
+          text: 'Não',
+          role: 'cancel',
+        },
+        {
+          text: 'Retornar',
+          handler: () => {
+            localStorage.clear();
+            this.nav.navigateBack('/');
+          },
+        },
+      ],
+    });
+
+    await voltando.present();
+  }
+  carregadados(){
+
+    this.endereco.endereco = localStorage.getItem('endereco')!;
+    this.endereco.numero = localStorage.getItem('numero')!;
+    this.endereco.complemento = localStorage.getItem('complemento')!;
+    this.endereco.bairro = localStorage.getItem('bairro')!;
+    this.endereco.cep = localStorage.getItem('cep')!;
+    this.endereco.cidade = localStorage.getItem('cidade')!;
+    this.endereco.estado = localStorage.getItem('estado')!;
+    
+  }
+
+
+  
 }

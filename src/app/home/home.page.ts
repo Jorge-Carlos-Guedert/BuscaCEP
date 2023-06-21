@@ -5,6 +5,7 @@ import {
   NumericValueAccessor,
   ToastController,
 } from '@ionic/angular';
+import { EnderecosService } from '../services/enderecos.service';
 
 @Component({
   selector: 'app-home',
@@ -24,23 +25,19 @@ export class HomePage {
     estado: '',
   };
 
+ 
+
+  LabelBotao = 'Cadastrar';
+
   constructor(
     public mensagem: ToastController,
     public nav: NavController,
-    private cep: CepService
+    private cep: CepService,
+    public servico: EnderecosService
   ) {}
 
-   
-
-  ionViewDidEnter(){
-    if(localStorage.getItem('cep')){
-      this.editar();
-    }else{
-      this.limpadados();
-    }
-
-
-
+  ionViewDidEnter() {
+    this.limpadados();
   }
   searchCEP(evento: any) {
     const cepDig = evento.detail.value;
@@ -81,16 +78,30 @@ export class HomePage {
   }
 
   salvamento() {
-    localStorage.setItem('endereco', this.endereco.endereco);
-    localStorage.setItem('numero', this.endereco.numero);
-    localStorage.setItem('cep', this.endereco.cep);
-    localStorage.setItem('bairro', this.endereco.bairro);
-    localStorage.setItem('cidade', this.endereco.cidade);
-    localStorage.setItem('estado', this.endereco.estado);
-    localStorage.setItem('complemento', this.endereco.complemento);
+    // localStorage.setItem('endereco', this.endereco.endereco);
+    // localStorage.setItem('numero', this.endereco.numero);
+    // localStorage.setItem('cep', this.endereco.cep);
+    // localStorage.setItem('bairro', this.endereco.bairro);
+    // localStorage.setItem('cidade', this.endereco.cidade);
+    // localStorage.setItem('estado', this.endereco.estado);
+    // localStorage.setItem('complemento', this.endereco.complemento);
+
+    // this.enderecos.push(this.endereco);
+    this.servico.salvarEndereco(
+      this.endereco.endereco,
+      this.endereco.numero,
+      this.endereco.cep,
+      this.endereco.complemento,
+      this.endereco.bairro,
+      this.endereco.cidade,
+      this.endereco.estado
+    );
+
+    this.nav.navigateRoot('conclusao');
   }
 
-  limpadados(){
+  limpadados() {
+    this.LabelBotao = 'Cadastrar';
 
     this.endereco.endereco = '';
     this.endereco.numero = '';
@@ -99,13 +110,19 @@ export class HomePage {
     this.endereco.cep = '';
     this.endereco.cidade = '';
     this.endereco.estado = '';
-
   }
 
-  editar(){
+  // editar() {
+  //   this.LabelBotao = 'Editar';
 
-
-  }
+  //   this.endereco.endereco = localStorage.getItem('endereco')!;
+  //   this.endereco.numero = localStorage.getItem('numero')!;
+  //   this.endereco.complemento = localStorage.getItem('complemento')!;
+  //   this.endereco.bairro = localStorage.getItem('bairro')!;
+  //   this.endereco.cep = localStorage.getItem('cep')!;
+  //   this.endereco.cidade = localStorage.getItem('cidade')!;
+  //   this.endereco.estado = localStorage.getItem('estado')!;
+  // }
 
   async exibeToast(msg: string, cor: string) {
     const toast = await this.mensagem.create({

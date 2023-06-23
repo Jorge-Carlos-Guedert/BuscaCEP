@@ -25,7 +25,7 @@ export class HomePage {
     estado: '',
   };
 
- 
+
 
   LabelBotao = 'Cadastrar';
 
@@ -34,7 +34,7 @@ export class HomePage {
     public nav: NavController,
     private cep: CepService,
     public servico: EnderecosService
-  ) {}
+  ) { }
 
   ionViewDidEnter() {
     this.limpadados();
@@ -97,7 +97,7 @@ export class HomePage {
       this.endereco.estado
     );
 
-    this.nav.navigateRoot('conclusao');
+
   }
 
   limpadados() {

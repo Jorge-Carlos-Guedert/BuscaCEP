@@ -8,7 +8,6 @@ import { EnderecosService } from '../services/enderecos.service';
   styleUrls: ['./conclusao.page.scss'],
 })
 export class ConclusaoPage implements OnInit {
-
   endereco = {
     endereco: '',
     numero: '',
@@ -21,13 +20,13 @@ export class ConclusaoPage implements OnInit {
 
   public enderecos: any[] = [];
 
-  constructor(public alerta: AlertController,
+  constructor(
+    public alerta: AlertController,
     public nav: NavController,
-    public servicos: EnderecosService) {}
-  
-  ngOnInit(): void {
-    
-  }
+    public servicos: EnderecosService
+  ) {}
+
+  ngOnInit(): void {}
 
   ionViewDidEnter() {
     this.carregadados();
@@ -36,14 +35,10 @@ export class ConclusaoPage implements OnInit {
   async voltar() {
     const voltando = await this.alerta.create({
       header: 'ATENÇÃO!',
-      message: 'Deseja adicionar um novo endereço',
+      message: 'Nenhum enderço encontrado, cadastre um novo!',
       buttons: [
         {
-          text: 'Não',
-          role: 'cancel',
-        },
-        {
-          text: 'Sim',
+          text: 'OK',
           handler: () => {
             localStorage.clear();
             this.nav.navigateBack('/');
@@ -55,11 +50,10 @@ export class ConclusaoPage implements OnInit {
     await voltando.present();
   }
 
-  editar(){
+  novo() {
     this.nav.navigateRoot('/');
   }
-  carregadados(){
-
+  carregadados() {
     // this.endereco.endereco = localStorage.getItem('endereco')!;
     // this.endereco.numero = localStorage.getItem('numero')!;
     // this.endereco.complemento = localStorage.getItem('complemento')!;
@@ -68,12 +62,17 @@ export class ConclusaoPage implements OnInit {
     // this.endereco.cidade = localStorage.getItem('cidade')!;
     // this.endereco.estado = localStorage.getItem('estado')!;
 
-    if(this.servicos.listar()){
+    if (this.servicos.listar()) {
       this.enderecos = this.servicos.listar()!;
+      console.log(this.enderecos);
+      if (this.enderecos.length == 0) {
+        this.voltar();
+      }
     }
-    
   }
 
-
-  
+  deletar(cep: string) {
+    this.servicos.deletar(cep);
+    this.carregadados();
+  }
 }
